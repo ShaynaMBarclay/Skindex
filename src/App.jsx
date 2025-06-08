@@ -166,26 +166,48 @@ export default function App() {
 
         {error && <p className="error-message">Error: {error}</p>}
 
-        {analysisResult && (
-          <div className="analysis-result">
+        {analysisResult && analysisResult.products && (
+          <div style={{ marginTop: '1rem' }}>
             <h3>Analysis Result:</h3>
             <ul>
               {analysisResult.products.map((p, i) => (
                 <li key={i}>
-                  <strong>{p.name}</strong>: {p.description}
+                  <strong>{p.name}</strong>: {p.description} <br />
+                  <em>Use: {p.usageTime.join(', ')}, {p.frequency}</em>
                 </li>
               ))}
             </ul>
-            <h4>Recommended Order:</h4>
+
+            <h4>Recommended AM Routine:</h4>
             <ol>
-              {analysisResult.recommendedOrder.map((name, i) => (
+              {(analysisResult.recommendedRoutine?.AM || []).map((name, i) => (
                 <li key={i}>{name}</li>
               ))}
             </ol>
+
+            <h4>Recommended PM Routine:</h4>
+            <ol>
+              {(analysisResult.recommendedRoutine?.PM || []).map((name, i) => (
+                <li key={i}>{name}</li>
+              ))}
+            </ol>
+
+            {analysisResult.conflicts?.length > 0 && (
+              <>
+                <h4>Conflicts:</h4>
+                <ul>
+                  {analysisResult.conflicts.map((conflict, i) => (
+                    <li key={i}>
+                      ⚠️ <strong>{conflict.products.join(" & ")}</strong>: {conflict.reason}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         )}
       </div>
     )}
   </div>
-);
-}
+); 
+} 
