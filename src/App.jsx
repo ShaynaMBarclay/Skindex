@@ -17,6 +17,7 @@ import {
 } from "firebase/auth";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import './styles/App.css';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -123,64 +124,68 @@ export default function App() {
     );
   }
 
-  return (
-    <div>
-      <h1
-        style={{ textAlign: "center", marginTop: "2rem", color: "#e75480" }}
-      >
-        The Skindex
-      </h1>
-      <div style={{ maxWidth: 400, margin: "1rem auto", textAlign: "center" }}>
-        <p>Welcome, {user.email}</p>
-        <button onClick={handleLogout}>Log Out</button>
-      </div>
-
-      <ProductForm onSubmit={handleAddProduct} />
-
-      {products.length > 0 && (
-        <div style={{ maxWidth: "600px", margin: "2rem auto" }}>
-          <h3>Added Products:</h3>
-          <ul>
-            {products.map((p) => (
-              <li key={p.id} style={{ marginBottom: '0.5rem' }}>
-                <strong>{p.name}</strong> ({p.type}) — {p.useTime.join("/")}
-                <button 
-                  onClick={() => handleDeleteProduct(p.id)} 
-                  style={{ marginLeft: '1rem', color: 'red', cursor: 'pointer' }}
-                  aria-label={`Delete ${p.name}`}
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-
-          <button onClick={analyzeProducts} disabled={loading} style={{ marginTop: '1rem' }}>
-            {loading ? 'Analyzing...' : 'Analyze Skincare Products'}
-          </button>
-
-          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-
-          {analysisResult && (
-            <div style={{ marginTop: '1rem' }}>
-              <h3>Analysis Result:</h3>
-              <ul>
-                {analysisResult.products.map((p, i) => (
-                  <li key={i}>
-                    <strong>{p.name}</strong>: {p.description}
-                  </li>
-                ))}
-              </ul>
-              <h4>Recommended Order:</h4>
-              <ol>
-                {analysisResult.recommendedOrder.map((name, i) => (
-                  <li key={i}>{name}</li>
-                ))}
-              </ol>
-            </div>
-          )}
-        </div>
-      )}
+ return (
+  <div>
+    <h1 className="app-title">
+      The Skindex
+    </h1>
+    <div className="user-info">
+      <p>Welcome, {user.email}</p>
+      <button onClick={handleLogout}>Log Out</button>
     </div>
-  );
+
+    <ProductForm onSubmit={handleAddProduct} />
+
+    {products.length > 0 && (
+      <div className="added-products">
+        <h3>Added Products:</h3>
+        <ul>
+          {products.map((p) => (
+            <li key={p.id}>
+              <div>
+                <strong>{p.name}</strong> ({p.type})
+                <span>— {p.useTime.join("/")}</span>
+              </div>
+              <button
+                onClick={() => handleDeleteProduct(p.id)}
+                aria-label={`Delete ${p.name}`}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          onClick={analyzeProducts}
+          disabled={loading}
+          className="analyze-button"
+        >
+          {loading ? "Analyzing..." : "Analyze Skincare Products"}
+        </button>
+
+        {error && <p className="error-message">Error: {error}</p>}
+
+        {analysisResult && (
+          <div className="analysis-result">
+            <h3>Analysis Result:</h3>
+            <ul>
+              {analysisResult.products.map((p, i) => (
+                <li key={i}>
+                  <strong>{p.name}</strong>: {p.description}
+                </li>
+              ))}
+            </ul>
+            <h4>Recommended Order:</h4>
+            <ol>
+              {analysisResult.recommendedOrder.map((name, i) => (
+                <li key={i}>{name}</li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+);
 }

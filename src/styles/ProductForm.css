@@ -5,31 +5,56 @@
   max-width: 500px;
   margin: 2rem auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .product-form h2 {
   text-align: center;
   color: #d63384;
+  margin-bottom: 1.5rem;
 }
 
 .product-form label {
   display: block;
   margin: 1rem 0 0.5rem;
-  font-weight: bold;
+  font-weight: 600;
+  color: #5a2a4d;
 }
 
 .product-form input,
 .product-form select {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.6rem 0.8rem;
   font-size: 1rem;
   border-radius: 5px;
   border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+.product-form input:focus,
+.product-form select:focus {
+  border-color: #d63384;
+  outline: none;
+  box-shadow: 0 0 5px rgba(214, 51, 132, 0.5);
 }
 
 .product-form fieldset {
   margin-top: 1rem;
   border: none;
+  padding: 0;
+}
+
+.product-form fieldset legend {
+  font-weight: 600;
+  color: #5a2a4d;
+  margin-bottom: 0.5rem;
+}
+
+.product-form fieldset label {
+  font-weight: normal;
+  margin-right: 1.5rem;
+  cursor: pointer;
+  color: #444;
 }
 
 .product-form button {
@@ -40,10 +65,111 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .product-form button:hover {
   background-color: #d63384;
+}
+
+/* Container for the product list */
+.added-products {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #fff0f5;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 0 12px rgba(214, 51, 132, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #5a2a4d;
+}
+
+/* Title */
+.added-products h3 {
+  text-align: center;
+  color: #d63384;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+/* Product list */
+.added-products ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Each product item */
+.added-products li {
+  background-color: #fff;
+  border: 1px solid #d9a8c9;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(214, 51, 132, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.added-products li:hover {
+  box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+}
+
+/* Product info text */
+.added-products li strong {
+  color: #e75480;
+  font-weight: 700;
+}
+
+/* Use time info */
+.added-products li span {
+  font-size: 0.9rem;
+  color: #7a4a6b;
+  margin-left: 0.5rem;
+}
+
+/* Delete button */
+.added-products button {
+  background: transparent;
+  border: none;
+  color: #e75480;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.added-products button:hover,
+.added-products button:focus {
+  background-color: #d63384;
+  color: #fff;
+  outline: none;
+}
+
+.user-info {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.user-info button {
+  background-color: #e75480;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  /* Make the button inline-block so text-align can center it */
+  display: inline-block;
+}
+
+.user-info button:hover {
+  background-color: #c8416e;
 }
