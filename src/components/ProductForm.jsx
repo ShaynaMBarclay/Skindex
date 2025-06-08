@@ -5,7 +5,6 @@ function ProductForm({ onSubmit }) {
     name: '',
     brand: '',
     type: '',
-    ingredients: '',
     useAM: false,
     usePM: false,
   });
@@ -22,7 +21,6 @@ function ProductForm({ onSubmit }) {
     e.preventDefault();
     const formattedProduct = {
       ...product,
-      ingredients: product.ingredients.split(',').map(i => i.trim()),
       useTime: [
         product.useAM ? 'AM' : null,
         product.usePM ? 'PM' : null,
@@ -33,7 +31,6 @@ function ProductForm({ onSubmit }) {
       name: '',
       brand: '',
       type: '',
-      ingredients: '',
       useAM: false,
       usePM: false,
     });
@@ -65,11 +62,6 @@ function ProductForm({ onSubmit }) {
           <option value="exfoliant">Exfoliant</option>
           <option value="treatment">Treatment</option>
         </select>
-      </label>
-
-      <label>
-        Active Ingredients (comma-separated):
-        <input type="text" name="ingredients" value={product.ingredients} onChange={handleChange} />
       </label>
 
       <fieldset>

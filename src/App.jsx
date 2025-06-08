@@ -8,6 +8,8 @@ import {
   where,
   getDocs,
   onSnapshot,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import {
   onAuthStateChanged,
@@ -16,19 +18,21 @@ import {
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 
-
 export default function App() {
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
   const [showSignup, setShowSignup] = useState(true);
 
-  // Listen for auth state changes
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setProducts([]); // Clear products when user changes
+      setProducts([]);
+      setAnalysisResult(null);
       if (currentUser) {
-        // Listen for products for this user in real time
         const productsRef = collection(db, "users", currentUser.uid, "products");
         const unsubscribeProducts = onSnapshot(productsRef, (snapshot) => {
           const userProducts = snapshot.docs.map((doc) => ({
@@ -43,7 +47,6 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Add product under current user's collection
   const handleAddProduct = async (newProduct) => {
     if (!user) {
       alert("You must be logged in to add products.");
@@ -51,17 +54,60 @@ export default function App() {
     }
     try {
       const productsRef = collection(db, "users", user.uid, "products");
-      const docRef = await addDoc(productsRef, newProduct);
-      console.log("Saved with ID:", docRef.id);
-      // No need to update state manually, onSnapshot handles it
+      await addDoc(productsRef, newProduct);
     } catch (error) {
       console.error("Error saving product:", error);
+    }
+  };
+
+  // New: Delete product from Firestore
+  const handleDeleteProduct = async (productId) => {
+    if (!user) {
+      alert("You must be logged in.");
+      return;
+    }
+    try {
+      const productDocRef = doc(db, "users", user.uid, "products", productId);
+      await deleteDoc(productDocRef);
+      // onSnapshot will automatically update products state
+    } catch (error) {
+      console.error("Error deleting product:", error);
     }
   };
 
   const handleLogout = async () => {
     await signOut(auth);
   };
+
+  async function analyzeProducts() {
+    if (products.length === 0) {
+      alert("Please add some products first!");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setAnalysisResult(null);
+
+    try {
+      const response = await fetch('http://localhost:4000/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ products }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get your analysis');
+      }
+
+      const data = await response.json();
+      setAnalysisResult(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (!user) {
     return (
@@ -96,11 +142,43 @@ export default function App() {
           <h3>Added Products:</h3>
           <ul>
             {products.map((p) => (
-              <li key={p.id}>
+              <li key={p.id} style={{ marginBottom: '0.5rem' }}>
                 <strong>{p.name}</strong> ({p.type}) — {p.useTime.join("/")}
+                <button 
+                  onClick={() => handleDeleteProduct(p.id)} 
+                  style={{ marginLeft: '1rem', color: 'red', cursor: 'pointer' }}
+                  aria-label={`Delete ${p.name}`}
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
+
+          <button onClick={analyzeProducts} disabled={loading} style={{ marginTop: '1rem' }}>
+            {loading ? 'Analyzing...' : 'Analyze Skincare Products'}
+          </button>
+
+          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+          {analysisResult && (
+            <div style={{ marginTop: '1rem' }}>
+              <h3>Analysis Result:</h3>
+              <ul>
+                {analysisResult.products.map((p, i) => (
+                  <li key={i}>
+                    <strong>{p.name}</strong>: {p.description}
+                  </li>
+                ))}
+              </ul>
+              <h4>Recommended Order:</h4>
+              <ol>
+                {analysisResult.recommendedOrder.map((name, i) => (
+                  <li key={i}>{name}</li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
       )}
     </div>
