@@ -186,18 +186,20 @@ export default function App() {
   }
 
   if (!user) {
-    return (
-      <div style={{ maxWidth: 400, margin: "auto" }}>
+  return (
+    <div className="auth-container">
+      <div className="auth-box">
         {showSignup ? <Signup /> : <Login />}
         <button
           onClick={() => setShowSignup(!showSignup)}
-          style={{ marginTop: 20 }}
+          className="toggle-auth-button"
         >
           {showSignup ? "Already have an account? Log In" : "No account? Sign Up"}
         </button>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div>
@@ -290,7 +292,13 @@ export default function App() {
                   placeholder="Enter your email"
                   value={emailToSend}
                   onChange={(e) => setEmailToSend(e.target.value)}
-                  style={{ padding: '0.5rem', width: '100%', maxWidth: 300 }}
+                  style={{ 
+                   padding: '0.5rem', 
+                   width: '100%', 
+                   maxWidth: 300, 
+                   border: '2px solid #d9a8c9', 
+                   marginRight: '1rem',
+                   }}
                 />
                 <button onClick={sendResultsByEmail} style={{ marginTop: '0.5rem' }}>
                   Send Results by Email
@@ -307,72 +315,59 @@ export default function App() {
       )}
 
       {isModalOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            zIndex: 1000,
-          }}
-          onClick={() => {
-            setIsModalOpen(false);
-            setCurrentPassword("");
-            setNewPassword("");
-            setPasswordUpdateStatus(null);
-            setReauthError(null);
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: '8px',
-              width: '90%',
-              maxWidth: 400,
-              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-              textAlign: 'center',
-            }}
-          >
-            <h3>Update Password</h3>
-            <input
-              type="password"
-              placeholder="Current Password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
-            />
-            <input
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
-            />
-            {reauthError && <p style={{ color: 'red', marginBottom: '1rem' }}>{reauthError}</p>}
-            {passwordUpdateStatus && (
-              <p style={{ color: passwordUpdateStatus.includes("Error") ? 'red' : 'green', marginBottom: '1rem' }}>
-                {passwordUpdateStatus}
-              </p>
-            )}
-            <button onClick={handleUpdatePassword} style={{ marginRight: '1rem' }}>
-              Update Password
-            </button>
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
-                setCurrentPassword("");
-                setNewPassword("");
-                setPasswordUpdateStatus(null);
-                setReauthError(null);
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+  <div
+    className="modal-overlay"
+    onClick={() => {
+      setIsModalOpen(false);
+      setCurrentPassword("");
+      setNewPassword("");
+      setPasswordUpdateStatus(null);
+      setReauthError(null);
+    }}
+  >
+    <div
+      className="modal-content"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h3>Update Password</h3>
+      <input
+        type="password"
+        placeholder="Current Password"
+        value={currentPassword}
+        onChange={(e) => setCurrentPassword(e.target.value)}
+        className="modal-input"
+      />
+      <input
+        type="password"
+        placeholder="New Password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        className="modal-input"
+      />
+      {reauthError && <p className="modal-error">{reauthError}</p>}
+      {passwordUpdateStatus && (
+        <p className={`modal-status ${passwordUpdateStatus.includes("Error") ? 'error' : 'success'}`}>
+          {passwordUpdateStatus}
+        </p>
       )}
+      <button onClick={handleUpdatePassword} className="modal-button update-button">
+        Update Password
+      </button>
+      <button
+        onClick={() => {
+          setIsModalOpen(false);
+          setCurrentPassword("");
+          setNewPassword("");
+          setPasswordUpdateStatus(null);
+          setReauthError(null);
+        }}
+        className="modal-button cancel-button"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+   )}
     </div>
   );
 }

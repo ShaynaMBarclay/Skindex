@@ -21,25 +21,36 @@ export default function Signup() {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: "auto" }}>
-      <h2>Sign Up</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <form
+      onSubmit={handleSubmit}
+      className="login-form"  
+    >
+      <h2 className="login-title">Sign Up</h2>
+
+      {error && <p className="login-error">{error}</p>}
+
       <input
         type="email"
         placeholder="Email"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         required
+        className="login-input"  
       />
+
       <input
         type="password"
         placeholder="Password"
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         required
         minLength={6}
+        className="login-input"  
       />
-      <button type="submit">Sign Up</button>
+
+      <button type="submit" className="login-button">
+        Sign Up
+      </button>
     </form>
   );
 }

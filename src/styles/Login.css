@@ -1,0 +1,130 @@
+
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #fff0f5;
+  box-sizing: border-box;
+  overflow: hidden; 
+}
+
+
+.auth-box {
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  background-color: #fff0f5;
+  border-radius: 10px;
+  padding: 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
+  overflow-y: auto; 
+  box-shadow: 0 0 10px rgba(214, 51, 132, 0.15);
+  border: 2px solid #d9a8c9;
+}
+
+
+.auth-box::-webkit-scrollbar {
+  width: 8px;
+}
+.auth-box::-webkit-scrollbar-thumb {
+  background-color: #d63384;
+  border-radius: 4px;
+}
+
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.login-title {
+  text-align: center;
+  color: #d63384;
+  margin-bottom: 2rem;
+  font-family: "Raleway", sans-serif;
+}
+
+
+.login-error {
+  color: red;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+}
+
+
+.login-input {
+  width: 100%;
+  padding: 1rem 0.8rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 2px solid #d9a8c9;
+  transition: border-color 0.3s ease;
+  font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
+}
+
+.login-input:focus {
+  border-color: #d63384;
+  outline: none;
+}
+
+.login-button {
+  width: 100%; 
+  max-width: 200px; 
+  align-self: center;
+  padding: 0.8rem;
+  background-color: #e75480;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "Raleway", sans-serif;
+}
+
+.login-button:hover {
+  background-color: #d63384;
+}
+
+
+.toggle-auth-button {
+  margin-top: 1rem;
+  background: transparent;
+  border: none;
+  color: #d63384;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  padding: 0;
+  align-self: center;
+}
+
+.toggle-auth-button:hover {
+  color: #a8286b;
+  text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .auth-box {
+    max-width: 90vw;
+    padding: 1.5rem 1.5rem;
+  }
+  
+  .login-button {
+    max-width: 100%;
+  }
+}

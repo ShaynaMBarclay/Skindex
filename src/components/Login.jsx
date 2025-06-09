@@ -19,27 +19,31 @@ export default function Login() {
       setError(err.message);
     }
   };
-
+  
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: "auto" }}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        required
-        minLength={6}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login-container">
+      <form className="login-wrapper" onSubmit={handleSubmit}>
+        <h2 className="login-title">Login</h2>
+        {error && <p className="login-error">{error}</p>}
+        <input
+          className="login-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          minLength={6}
+        />
+        <button className="login-button" type="submit">Login</button>
+      </form>
+    </div>
   );
 }
