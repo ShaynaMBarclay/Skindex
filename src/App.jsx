@@ -28,11 +28,16 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [emailToSend, setEmailToSend] = useState('');
+  const [sendEmailStatus, setSendEmailStatus] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setProducts([]);
       setAnalysisResult(null);
+      setEmailToSend(''); 
+      setSendEmailStatus(null);
       if (currentUser) {
         const productsRef = collection(db, "users", currentUser.uid, "products");
         const unsubscribeProducts = onSnapshot(productsRef, (snapshot) => {
@@ -89,6 +94,8 @@ export default function App() {
     setLoading(true);
     setError(null);
     setAnalysisResult(null);
+    setSendEmailStatus(null);
+    setEmailToSend('');
 
     try {
       const response = await fetch('https://skindexserver.onrender.com/analyze', {
@@ -107,6 +114,31 @@ export default function App() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function sendResultsByEmail() {
+    if (!emailToSend) {
+      alert("Please enter an email address.");
+      return;
+    }
+
+    setSendEmailStatus(null);
+
+     try {
+      const response = await fetch('https://skindexserver.onrender.com/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailToSend, analysisResult }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send email.");
+      }
+
+      setSendEmailStatus("Email sent successfully!");
+    } catch (err) {
+      setSendEmailStatus(`Error sending email: ${err.message}`);
     }
   }
 
@@ -204,6 +236,26 @@ export default function App() {
                 </ul>
               </>
             )}
+
+            <div style={{ marginTop: '2rem' }}>
+                <h4>Get your results emailed (optional):</h4>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={emailToSend}
+                  onChange={(e) => setEmailToSend(e.target.value)}
+                  style={{ padding: '0.5rem', width: '100%', maxWidth: 300 }}
+                />
+                <button onClick={sendResultsByEmail} style={{ marginTop: '0.5rem' }}>
+                  Send Results by Email
+                </button>
+                {sendEmailStatus && (
+                  <p style={{ marginTop: '0.5rem', color: sendEmailStatus.includes("Error") ? 'red' : 'green' }}>
+                    {sendEmailStatus}
+                  </p>
+                )}
+              </div>
+
           </div>
         )}
       </div>
