@@ -61,7 +61,7 @@ export default function App() {
     }
   };
 
-  // New: Delete product from Firestore
+  
   const handleDeleteProduct = async (productId) => {
     if (!user) {
       alert("You must be logged in.");
@@ -70,7 +70,7 @@ export default function App() {
     try {
       const productDocRef = doc(db, "users", user.uid, "products", productId);
       await deleteDoc(productDocRef);
-      // onSnapshot will automatically update products state
+      
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -91,7 +91,7 @@ export default function App() {
     setAnalysisResult(null);
 
     try {
-      const response = await fetch('http://localhost:4000/analyze', {
+      const response = await fetch('https://skindexserver.onrender.com/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ products }),
