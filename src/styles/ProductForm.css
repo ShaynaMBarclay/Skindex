@@ -19,6 +19,7 @@
 .product-form label {
   display: block;
   margin: 1rem 0 0.5rem;
+  margin-right: 1rem;
   font-weight: 600;
   color: #5a2a4d;
 }
