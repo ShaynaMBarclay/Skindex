@@ -4,9 +4,6 @@ import { db, auth } from "./firebase";
 import {
   collection,
   addDoc,
-  query,
-  where,
-  getDocs,
   onSnapshot,
   deleteDoc,
   doc,
@@ -14,6 +11,9 @@ import {
 import {
   onAuthStateChanged,
   signOut,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
 } from "firebase/auth";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
@@ -31,12 +31,18 @@ export default function App() {
   const [emailToSend, setEmailToSend] = useState('');
   const [sendEmailStatus, setSendEmailStatus] = useState(null);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
+  const [reauthError, setReauthError] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setProducts([]);
       setAnalysisResult(null);
-      setEmailToSend(''); 
+      setEmailToSend('');
       setSendEmailStatus(null);
       if (currentUser) {
         const productsRef = collection(db, "users", currentUser.uid, "products");
@@ -66,7 +72,6 @@ export default function App() {
     }
   };
 
-  
   const handleDeleteProduct = async (productId) => {
     if (!user) {
       alert("You must be logged in.");
@@ -75,7 +80,6 @@ export default function App() {
     try {
       const productDocRef = doc(db, "users", user.uid, "products", productId);
       await deleteDoc(productDocRef);
-      
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -125,7 +129,7 @@ export default function App() {
 
     setSendEmailStatus(null);
 
-     try {
+    try {
       const response = await fetch('https://skindexserver.onrender.com/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -139,6 +143,45 @@ export default function App() {
       setSendEmailStatus("Email sent successfully!");
     } catch (err) {
       setSendEmailStatus(`Error sending email: ${err.message}`);
+    }
+  }
+
+  async function handleUpdatePassword() {
+    setPasswordUpdateStatus(null);
+    setReauthError(null);
+
+    if (!currentPassword) {
+      setReauthError("Please enter your current password to confirm.");
+      return;
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+      setPasswordUpdateStatus("Password must be at least 6 characters.");
+      return;
+    }
+
+    try {
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+
+      await reauthenticateWithCredential(user, credential);
+
+      await updatePassword(user, newPassword);
+
+      setPasswordUpdateStatus("Password updated successfully.");
+      setNewPassword("");
+      setCurrentPassword("");
+
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setPasswordUpdateStatus(null);
+        setReauthError(null);
+      }, 1500);
+    } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        setReauthError("Current password is incorrect.");
+      } else {
+        setPasswordUpdateStatus(`Error: ${error.message}`);
+      }
     }
   }
 
@@ -156,88 +199,91 @@ export default function App() {
     );
   }
 
- return (
-  <div>
-    <h1 className="app-title">
-      The Skindex
-    </h1>
-    <div className="user-info">
-      <p>Welcome, {user.email}</p>
-      <button onClick={handleLogout}>Log Out</button>
-    </div>
-
-    <ProductForm onSubmit={handleAddProduct} />
-
-    {products.length > 0 && (
-      <div className="added-products">
-        <h3>Added Products:</h3>
-        <ul>
-          {products.map((p) => (
-            <li key={p.id}>
-              <div>
-                <strong>{p.name}</strong> ({p.type})
-                <span>— {p.useTime.join("/")}</span>
-              </div>
-              <button
-                onClick={() => handleDeleteProduct(p.id)}
-                aria-label={`Delete ${p.name}`}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <button
-          onClick={analyzeProducts}
-          disabled={loading}
-          className="analyze-button"
-        >
-          {loading ? "Analyzing..." : "Analyze Skincare Products"}
+  return (
+    <div>
+      <h1 className="app-title">
+        The Skindex
+      </h1>
+      <div className="user-info">
+        <p>Welcome, {user.email}</p>
+        <button onClick={() => setIsModalOpen(true)} style={{ marginRight: 10 }}>
+          Update Password
         </button>
+        <button onClick={handleLogout}>Log Out</button>
+      </div>
 
-        {error && <p className="error-message">Error: {error}</p>}
+      <ProductForm onSubmit={handleAddProduct} />
 
-        {analysisResult && analysisResult.products && (
-          <div style={{ marginTop: '1rem' }}>
-            <h3>Analysis Result:</h3>
-            <ul>
-              {analysisResult.products.map((p, i) => (
-                <li key={i}>
-                  <strong>{p.name}</strong>: {p.description} <br />
-                  <em>Use: {p.usageTime.join(', ')}, {p.frequency}</em>
-                </li>
-              ))}
-            </ul>
+      {products.length > 0 && (
+        <div className="added-products">
+          <h3>Added Products:</h3>
+          <ul>
+            {products.map((p) => (
+              <li key={p.id}>
+                <div>
+                  <strong>{p.name}</strong> ({p.type})
+                  <span> — {p.useTime.join("/")}</span>
+                </div>
+                <button
+                  onClick={() => handleDeleteProduct(p.id)}
+                  aria-label={`Delete ${p.name}`}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
 
-            <h4>Recommended AM Routine:</h4>
-            <ol>
-              {(analysisResult.recommendedRoutine?.AM || []).map((name, i) => (
-                <li key={i}>{name}</li>
-              ))}
-            </ol>
+          <button
+            onClick={analyzeProducts}
+            disabled={loading}
+            className="analyze-button"
+          >
+            {loading ? "Analyzing..." : "Analyze Skincare Products"}
+          </button>
 
-            <h4>Recommended PM Routine:</h4>
-            <ol>
-              {(analysisResult.recommendedRoutine?.PM || []).map((name, i) => (
-                <li key={i}>{name}</li>
-              ))}
-            </ol>
+          {error && <p className="error-message">Error: {error}</p>}
 
-            {analysisResult.conflicts?.length > 0 && (
-              <>
-                <h4>Conflicts:</h4>
-                <ul>
-                  {analysisResult.conflicts.map((conflict, i) => (
-                    <li key={i}>
-                      ⚠️ <strong>{conflict.products.join(" & ")}</strong>: {conflict.reason}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
+          {analysisResult && analysisResult.products && (
+            <div style={{ marginTop: '1rem' }}>
+              <h3>Analysis Result:</h3>
+              <ul>
+                {analysisResult.products.map((p, i) => (
+                  <li key={i}>
+                    <strong>{p.name}</strong>: {p.description} <br />
+                    <em>Use: {p.usageTime.join(', ')}, {p.frequency}</em>
+                  </li>
+                ))}
+              </ul>
 
-            <div style={{ marginTop: '2rem' }}>
+              <h4>Recommended AM Routine:</h4>
+              <ol>
+                {(analysisResult.recommendedRoutine?.AM || []).map((name, i) => (
+                  <li key={i}>{name}</li>
+                ))}
+              </ol>
+
+              <h4>Recommended PM Routine:</h4>
+              <ol>
+                {(analysisResult.recommendedRoutine?.PM || []).map((name, i) => (
+                  <li key={i}>{name}</li>
+                ))}
+              </ol>
+
+              {analysisResult.conflicts?.length > 0 && (
+                <>
+                  <h4>Conflicts:</h4>
+                  <ul>
+                    {analysisResult.conflicts.map((conflict, i) => (
+                      <li key={i}>
+                        ⚠️ <strong>{conflict.products.join(" & ")}</strong>: {conflict.reason}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              <div style={{ marginTop: '2rem' }}>
                 <h4>Get your results emailed (optional):</h4>
                 <input
                   type="email"
@@ -255,11 +301,78 @@ export default function App() {
                   </p>
                 )}
               </div>
+            </div>
+          )}
+        </div>
+      )}
 
+      {isModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            zIndex: 1000,
+          }}
+          onClick={() => {
+            setIsModalOpen(false);
+            setCurrentPassword("");
+            setNewPassword("");
+            setPasswordUpdateStatus(null);
+            setReauthError(null);
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: 'white',
+              padding: '2rem',
+              borderRadius: '8px',
+              width: '90%',
+              maxWidth: 400,
+              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <h3>Update Password</h3>
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              style={{ padding: '0.5rem', width: '100%', marginBottom: '1rem' }}
+            />
+            {reauthError && <p style={{ color: 'red', marginBottom: '1rem' }}>{reauthError}</p>}
+            {passwordUpdateStatus && (
+              <p style={{ color: passwordUpdateStatus.includes("Error") ? 'red' : 'green', marginBottom: '1rem' }}>
+                {passwordUpdateStatus}
+              </p>
+            )}
+            <button onClick={handleUpdatePassword} style={{ marginRight: '1rem' }}>
+              Update Password
+            </button>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setCurrentPassword("");
+                setNewPassword("");
+                setPasswordUpdateStatus(null);
+                setReauthError(null);
+              }}
+            >
+              Cancel
+            </button>
           </div>
-        )}
-      </div>
-    )}
-  </div>
-); 
-} 
+        </div>
+      )}
+    </div>
+  );
+}
