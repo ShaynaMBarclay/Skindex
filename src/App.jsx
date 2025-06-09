@@ -206,6 +206,12 @@ export default function App() {
       <h1 className="app-title">
         The Skindex
       </h1>
+      <p className="disclaimer">
+     ⚠️ This is not medical advice. 
+     The analysis may not be 100% accurate. 
+     Please consult a licensed medical professional for any health concerns.
+    </p>
+
       <div className="user-info">
         <p>Welcome, {user.email}</p>
         <button onClick={() => setIsModalOpen(true)} style={{ marginRight: 10 }}>
