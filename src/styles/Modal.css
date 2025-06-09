@@ -107,3 +107,66 @@
   background-color: #d63384;
   color: white;
 }
+
+/* Tablet: 768px to 1024px */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .modal-content {
+    padding: 2rem 3rem;
+    max-width: 400px;
+    width: 90%;
+  }
+  .modal-button {
+    width: 50%;
+    font-size: 1rem;
+    padding: 0.7rem 0;
+    margin: 0 0.4rem;
+  }
+  .modal-input {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.7rem;
+  }
+  .modal-content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .modal-button {
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    display: block;
+  }
+  .modal-button + .modal-button {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Mobile: up to 767px */
+@media (max-width: 767px) {
+  .modal-content {
+    padding: 1.5rem 2rem;
+    max-width: 90%;
+    width: 100%;
+    border-radius: 8px;
+    margin: 1rem;
+  }
+  .modal-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  .modal-input {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .modal-button {
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    display: block;
+  }
+  .modal-button + .modal-button {
+    margin-top: 0.5rem;
+  }
+}
