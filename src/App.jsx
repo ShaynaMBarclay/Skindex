@@ -15,6 +15,7 @@ import {
   reauthenticateWithCredential,
   updatePassword,
 } from "firebase/auth";
+import Landing from './Landing';
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import './styles/App.css';
@@ -22,7 +23,8 @@ import './styles/App.css';
 export default function App() {
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
-  const [showSignup, setShowSignup] = useState(true);
+  // Initialize showSignup to null so the Landing page shows first
+  const [showSignup, setShowSignup] = useState(null);
 
   const [analysisResult, setAnalysisResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -186,20 +188,41 @@ export default function App() {
   }
 
   if (!user) {
-  return (
-    <div className="auth-container">
-      <div className="auth-box">
-        {showSignup ? <Signup /> : <Login />}
-        <button
-          onClick={() => setShowSignup(!showSignup)}
-          className="toggle-auth-button"
-        >
-          {showSignup ? "Already have an account? Log In" : "No account? Sign Up"}
-        </button>
+    return (
+      <div className="auth-container">
+        {showSignup === null && (
+          <Landing
+            onLoginClick={() => setShowSignup(false)}
+            onSignupClick={() => setShowSignup(true)}
+          />
+        )}
+
+        {showSignup === false && (
+          <div className="auth-box">
+            <Login />
+            <button
+              onClick={() => setShowSignup(null)}
+              className="toggle-auth-button"
+            >
+              Back
+            </button>
+          </div>
+        )}
+
+        {showSignup === true && (
+          <div className="auth-box">
+            <Signup />
+            <button
+              onClick={() => setShowSignup(null)}
+              className="toggle-auth-button"
+            >
+              Back
+            </button>
+          </div>
+        )}
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div>
@@ -207,10 +230,10 @@ export default function App() {
         The Skindex
       </h1>
       <p className="disclaimer">
-     ⚠️ This is not medical advice. 
-     The analysis may not be 100% accurate. 
-     Please consult a licensed medical professional for any health concerns.
-    </p>
+        ⚠️ This is not medical advice. 
+        The analysis may not be 100% accurate. 
+        Please consult a licensed medical professional for any health concerns.
+      </p>
 
       <div className="user-info">
         <p>Welcome, {user.email}</p>
@@ -299,12 +322,12 @@ export default function App() {
                   value={emailToSend}
                   onChange={(e) => setEmailToSend(e.target.value)}
                   style={{ 
-                   padding: '0.5rem', 
-                   width: '100%', 
-                   maxWidth: 300, 
-                   border: '2px solid #d9a8c9', 
-                   marginRight: '1rem',
-                   }}
+                    padding: '0.5rem', 
+                    width: '100%', 
+                    maxWidth: 300, 
+                    border: '2px solid #d9a8c9', 
+                    marginRight: '1rem',
+                  }}
                 />
                 <button onClick={sendResultsByEmail} style={{ marginTop: '0.5rem' }}>
                   Send Results by Email
@@ -321,59 +344,59 @@ export default function App() {
       )}
 
       {isModalOpen && (
-  <div
-    className="modal-overlay"
-    onClick={() => {
-      setIsModalOpen(false);
-      setCurrentPassword("");
-      setNewPassword("");
-      setPasswordUpdateStatus(null);
-      setReauthError(null);
-    }}
-  >
-    <div
-      className="modal-content"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <h3>Update Password</h3>
-      <input
-        type="password"
-        placeholder="Current Password"
-        value={currentPassword}
-        onChange={(e) => setCurrentPassword(e.target.value)}
-        className="modal-input"
-      />
-      <input
-        type="password"
-        placeholder="New Password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        className="modal-input"
-      />
-      {reauthError && <p className="modal-error">{reauthError}</p>}
-      {passwordUpdateStatus && (
-        <p className={`modal-status ${passwordUpdateStatus.includes("Error") ? 'error' : 'success'}`}>
-          {passwordUpdateStatus}
-        </p>
+        <div
+          className="modal-overlay"
+          onClick={() => {
+            setIsModalOpen(false);
+            setCurrentPassword("");
+            setNewPassword("");
+            setPasswordUpdateStatus(null);
+            setReauthError(null);
+          }}
+        >
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Update Password</h3>
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="modal-input"
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="modal-input"
+            />
+            {reauthError && <p className="modal-error">{reauthError}</p>}
+            {passwordUpdateStatus && (
+              <p className={`modal-status ${passwordUpdateStatus.includes("Error") ? 'error' : 'success'}`}>
+                {passwordUpdateStatus}
+              </p>
+            )}
+            <button onClick={handleUpdatePassword} className="modal-button update-button">
+              Update Password
+            </button>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setCurrentPassword("");
+                setNewPassword("");
+                setPasswordUpdateStatus(null);
+                setReauthError(null);
+              }}
+              className="modal-button cancel-button"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       )}
-      <button onClick={handleUpdatePassword} className="modal-button update-button">
-        Update Password
-      </button>
-      <button
-        onClick={() => {
-          setIsModalOpen(false);
-          setCurrentPassword("");
-          setNewPassword("");
-          setPasswordUpdateStatus(null);
-          setReauthError(null);
-        }}
-        className="modal-button cancel-button"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-   )}
     </div>
   );
 }

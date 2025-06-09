@@ -42,7 +42,9 @@ export default function Login() {
           required
           minLength={6}
         />
+        <div className="login-button-wrapper">
         <button className="login-button" type="submit">Login</button>
+       </div>
       </form>
     </div>
   );

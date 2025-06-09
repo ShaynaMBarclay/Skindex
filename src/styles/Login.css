@@ -117,6 +117,13 @@
   text-decoration: none;
 }
 
+.login-button-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .auth-box {
