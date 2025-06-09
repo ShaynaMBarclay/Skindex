@@ -4,10 +4,8 @@
 @import './Landing.css';
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-.container {
-  padding: 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+.auth-container {
+  background:  #ffe4f1;
   font-family: "Raleway", sans-serif;
 }
 

@@ -23,7 +23,7 @@ import './styles/App.css';
 export default function App() {
   const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
-  // Initialize showSignup to null so the Landing page shows first
+  
   const [showSignup, setShowSignup] = useState(null);
 
   const [analysisResult, setAnalysisResult] = useState(null);
@@ -38,6 +38,10 @@ export default function App() {
   const [newPassword, setNewPassword] = useState("");
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState(null);
   const [reauthError, setReauthError] = useState(null);
+
+    useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [user, showSignup]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
