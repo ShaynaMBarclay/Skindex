@@ -36,10 +36,10 @@
 }
 
 .landing-title {
-  font-size: 3.5rem;
+  font-size: 3.8rem;
   color: #d63384;
-  margin-bottom: 1rem;
-  font-family: "Raleway", sans-serif;
+  margin-bottom: 0.7rem;
+  font-family: "Indie Flower", cursive;
   letter-spacing: 1.5px;
   text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.3);
   animation: fadeInSlide 1s ease-out forwards;
