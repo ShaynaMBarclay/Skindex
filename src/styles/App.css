@@ -2,7 +2,7 @@
 @import './Modal.css';
 @import './Login.css';
 @import './Landing.css';
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 .auth-container {
   background:  #ffe4f1;
@@ -10,10 +10,24 @@
 }
 
 h1 {
-  color: #e75480;
-  font-size: 2.5rem;
+  color: #faa5c2;
+  font-size: 4rem;
   text-align: center;
-  font-family: "Raleway", sans-serif;
+  font-family: "Indie Flower", cursive;
+  letter-spacing: 7px;
+   text-shadow:
+    -1px -1px 0 #fa45a6,
+     1px -1px 0#ed017f,
+    -1px  1px 0 #ed017f,
+     1px  1px 0 #ed017f,
+    -2px  0px 0 #ed017f,
+     2px  0px 0 #ed017f,
+     0px -2px 0 #880e4f,
+     0px  2px 0 #880e4f,
+
+     0 0 8px rgba(136, 14, 79, 0.6),
+     0 0 16px rgba(136, 14, 79, 0.4),
+     0 0 24px rgba(136, 14, 79, 0.2);
 }
 
 p {

@@ -86,7 +86,7 @@
 /* Container for the product list */
 .added-products {
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 2rem auto 4rem;
   background-color: #fff0f5;
   border-radius: 10px;
   padding: 1.5rem 2rem;

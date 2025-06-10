@@ -235,8 +235,8 @@ export default function App() {
       </h1>
       <p className="disclaimer">
         ⚠️ This is not medical advice. 
-        The analysis may not be 100% accurate. 
-        Please consult a licensed medical professional for any health concerns.
+        The analysis may not be 100% accurate and is not a replacement for a licensed professional. 
+        Please consult a licensed professional for any health concerns or more accurate and personalized information.
       </p>
 
       <div className="user-info">
@@ -274,12 +274,12 @@ export default function App() {
             disabled={loading}
             className="analyze-button"
           >
-            {loading ? "Analyzing..." : "Analyze Skincare Products"}
+            {loading ? "Analyzing your routine, please wait a moment ..." : "Analyze Skincare Products"}
           </button>
 
          <p className="analysis-disclaimer">
   If the analysis fails, try refreshing the page and trying again.
-  If the problem persists, contact me on <a href="https://twitter.com/shaydotdev" target="_blank" rel="noopener noreferrer">Twitter</a>.
+  If the problem persists, contact me on <a href="https://x.com/shaydotdev" target="_blank" rel="noopener noreferrer">Twitter</a>.
 </p>
 
           {error && <p className="error-message">Error: {error}</p>}
