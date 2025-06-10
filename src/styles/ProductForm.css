@@ -236,7 +236,7 @@ font-family: "Raleway", sans-serif;
   .product-form input,
   .product-form select {
     font-size: 0.9rem;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.2rem;
 
   }
   .product-form button {
