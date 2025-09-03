@@ -279,7 +279,7 @@ export default function App() {
 
          <p className="analysis-disclaimer">
   If the analysis fails, try refreshing the page and trying again.
-  If the problem persists, contact me on <a href="https://x.com/shaydotdev" target="_blank" rel="noopener noreferrer">Twitter</a>.
+  If the problem persists, contact me on <a href="https://x.com/sylvariae" target="_blank" rel="noopener noreferrer">Twitter</a>.
 </p>
 
           {error && <p className="error-message">Error: {error}</p>}
