@@ -146,7 +146,7 @@ export default function App() {
         throw new Error("Failed to send email.");
       }
 
-      setSendEmailStatus("Email sent successfully!");
+      setSendEmailStatus("Email sent successfully! Please check your spam folder if you do not see it.");
     } catch (err) {
       setSendEmailStatus(`Error sending email: ${err.message}`);
     }
