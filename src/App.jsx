@@ -316,7 +316,7 @@ export default function App() {
                 ))}
               </ol>
 
-             {analysisResult.conflicts?.length > 0 && (
+           {analysisResult.conflicts?.length > 0 && (
   <>
     <h4>Conflicts:</h4>
     <ul>
@@ -325,7 +325,9 @@ export default function App() {
           ? conflict.products.join(" & ")
           : conflict.products || "unknown";
 
-        const reasonStr = conflict.reason || "unspecified";
+        const reasonStr = typeof conflict.reason === 'string'
+          ? conflict.reason
+          : JSON.stringify(conflict.reason);
 
         return (
           <li key={i}>
