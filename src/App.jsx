@@ -316,17 +316,26 @@ export default function App() {
                 ))}
               </ol>
 
-{analysisResult.conflicts?.length > 0 && (
+             {analysisResult.conflicts?.length > 0 && (
   <>
     <h4>Conflicts:</h4>
     <ul>
-      {analysisResult.conflicts.map((conflict, i) => (
-        <li key={i}>⚠️ {conflict}</li>
-      ))}
+      {analysisResult.conflicts.map((conflict, i) => {
+        const productsStr = Array.isArray(conflict.products)
+          ? conflict.products.join(" & ")
+          : conflict.products || "unknown";
+
+        const reasonStr = conflict.reason || "unspecified";
+
+        return (
+          <li key={i}>
+            ⚠️ <strong>{productsStr}</strong>: {reasonStr}
+          </li>
+        );
+      })}
     </ul>
   </>
 )}
-
 
               <div style={{ marginTop: '2rem' }}>
                 <h4>Get your results emailed (optional):</h4>
