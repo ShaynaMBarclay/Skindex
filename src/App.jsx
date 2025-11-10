@@ -317,18 +317,21 @@ export default function App() {
               </ol>
 
               {analysisResult.conflicts?.length > 0 && (
-                <>
-                  <h4>Conflicts:</h4>
-                  <ul>
-                    {(analysisResult.conflicts || []).map((conflict, i) => (
-  <li key={i}>
-    ⚠️ <strong>{(conflict.products && conflict.products.length ? conflict.products.join(" & ") : "unknown")}</strong>: {conflict.reason || "unspecified"}
-  </li>
-))}
-
-                  </ul>
-                </>
-              )}
+  <>
+    <h4>Conflicts:</h4>
+    <ul>
+      {analysisResult.conflicts.map((conflict, i) => {
+        const products = Array.isArray(conflict.products) ? conflict.products.join(" & ") : conflict.products || "unknown";
+        const reason = conflict.reason || "unspecified";
+        return (
+          <li key={i}>
+            ⚠️ <strong>{products}</strong>: {reason}
+          </li>
+        );
+      })}
+    </ul>
+  </>
+)}
 
               <div style={{ marginTop: '2rem' }}>
                 <h4>Get your results emailed (optional):</h4>
