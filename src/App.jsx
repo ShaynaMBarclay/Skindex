@@ -316,16 +316,28 @@ export default function App() {
                 ))}
               </ol>
 
-              {analysisResult.conflicts?.length > 0 && (
+{analysisResult.conflicts?.length > 0 && (
   <>
     <h4>Conflicts:</h4>
     <ul>
       {analysisResult.conflicts.map((conflict, i) => {
-        const products = Array.isArray(conflict.products) ? conflict.products.join(" & ") : conflict.products || "unknown";
-        const reason = conflict.reason || "unspecified";
+        // Make sure products is a string
+        let productsStr = "unknown";
+        if (Array.isArray(conflict.products)) {
+          productsStr = conflict.products
+            .map(p => (typeof p === "string" ? p : JSON.stringify(p)))
+            .join(" & ");
+        } else if (typeof conflict.products === "string") {
+          productsStr = conflict.products;
+        }
+
+        const reasonStr = typeof conflict.reason === "string"
+          ? conflict.reason
+          : JSON.stringify(conflict.reason) || "unspecified";
+
         return (
           <li key={i}>
-            ⚠️ <strong>{products}</strong>: {reason}
+            ⚠️ <strong>{productsStr}</strong>: {reasonStr}
           </li>
         );
       })}
