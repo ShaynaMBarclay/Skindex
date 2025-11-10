@@ -320,31 +320,9 @@ export default function App() {
   <>
     <h4>Conflicts:</h4>
     <ul>
-      {analysisResult.conflicts.map((conflict, i) => {
-        let productsStr = "unknown";
-        if (Array.isArray(conflict.products)) {
-          
-          productsStr = conflict.products
-            .map(p => {
-              if (typeof p === "string") return p;
-              if (p && p.product) return p.product; 
-              return JSON.stringify(p);
-            })
-            .join(" & ");
-        } else if (typeof conflict.products === "string") {
-          productsStr = conflict.products;
-        }
-
-        const reasonStr = typeof conflict.reason === "string"
-          ? conflict.reason
-          : JSON.stringify(conflict.reason) || "unspecified";
-
-        return (
-          <li key={i}>
-            ⚠️ <strong>{productsStr}</strong>: {reasonStr}
-          </li>
-        );
-      })}
+      {analysisResult.conflicts.map((conflict, i) => (
+        <li key={i}>⚠️ {conflict}</li>
+      ))}
     </ul>
   </>
 )}
