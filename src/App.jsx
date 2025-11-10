@@ -321,11 +321,15 @@ export default function App() {
     <h4>Conflicts:</h4>
     <ul>
       {analysisResult.conflicts.map((conflict, i) => {
-        // Make sure products is a string
         let productsStr = "unknown";
         if (Array.isArray(conflict.products)) {
+          
           productsStr = conflict.products
-            .map(p => (typeof p === "string" ? p : JSON.stringify(p)))
+            .map(p => {
+              if (typeof p === "string") return p;
+              if (p && p.product) return p.product; 
+              return JSON.stringify(p);
+            })
             .join(" & ");
         } else if (typeof conflict.products === "string") {
           productsStr = conflict.products;
@@ -344,6 +348,7 @@ export default function App() {
     </ul>
   </>
 )}
+
 
               <div style={{ marginTop: '2rem' }}>
                 <h4>Get your results emailed (optional):</h4>
