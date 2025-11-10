@@ -254,19 +254,20 @@ export default function App() {
           <h3>Added Products:</h3>
           <ul>
             {products.map((p) => (
-              <li key={p.id}>
-                <div>
-                  <strong>{p.name}</strong> ({p.type})
-                  <span> — {p.useTime.join("/")}</span>
-                </div>
-                <button
-                  onClick={() => handleDeleteProduct(p.id)}
-                  aria-label={`Delete ${p.name}`}
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
+  <li key={p.id}>
+    <div>
+      <strong>{p.name || "Unnamed Product"}</strong> ({p.type || "unspecified"})
+      <span> — {(p.useTime && p.useTime.length ? p.useTime.join("/") : "unspecified")}</span>
+    </div>
+    <button
+      onClick={() => handleDeleteProduct(p.id)}
+      aria-label={`Delete ${p.name || "product"}`}
+    >
+      Delete
+    </button>
+  </li>
+))}
+
           </ul>
 
           <button
@@ -288,12 +289,17 @@ export default function App() {
             <div style={{ marginTop: '1rem' }}>
               <h3>Analysis Result:</h3>
               <ul>
-                {analysisResult.products.map((p, i) => (
-                  <li key={i}>
-                    <strong>{p.name}</strong>: {p.description} <br />
-                    <em>Use: {p.usageTime.join(', ')}, {p.frequency}</em>
-                  </li>
-                ))}
+                {(analysisResult.products || []).map((p, i) => (
+  <li key={i}>
+    <strong>{p.name || "Unnamed Product"}</strong>: {p.description || "No description"}
+    <br />
+    <em>
+      Use: {(p.usageTime && p.usageTime.length ? p.usageTime.join(', ') : "unspecified")},
+      {p.frequency || "unspecified"}
+    </em>
+  </li>
+))}
+
               </ul>
 
               <h4>Recommended AM Routine:</h4>
@@ -314,11 +320,12 @@ export default function App() {
                 <>
                   <h4>Conflicts:</h4>
                   <ul>
-                    {analysisResult.conflicts.map((conflict, i) => (
-                      <li key={i}>
-                        ⚠️ <strong>{conflict.products.join(" & ")}</strong>: {conflict.reason}
-                      </li>
-                    ))}
+                    {(analysisResult.conflicts || []).map((conflict, i) => (
+  <li key={i}>
+    ⚠️ <strong>{(conflict.products && conflict.products.length ? conflict.products.join(" & ") : "unknown")}</strong>: {conflict.reason || "unspecified"}
+  </li>
+))}
+
                   </ul>
                 </>
               )}
