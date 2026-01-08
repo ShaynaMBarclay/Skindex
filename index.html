@@ -18,51 +18,142 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skindex — Back Soon</title>
+
   <style>
+    :root {
+      --pink: #f7c6d9;
+      --peach: #fde2d4;
+      --cream: #fbf7f2;
+      --text: #3a2f2f;
+      --muted: #7a6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--cream), var(--peach));
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #fbf7f2;
-      color: #2a2a2a;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 1.5rem;
+      overflow: hidden;
+      color: var(--text);
     }
 
-    .container {
-      max-width: 480px;
+    /* floating bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(247, 198, 217, 0.35);
+      animation: float 8s ease-in-out infinite;
+      filter: blur(0.5px);
+    }
+
+    .bubble:nth-child(1) {
+      width: 140px;
+      height: 140px;
+      top: 10%;
+      left: 15%;
+    }
+
+    .bubble:nth-child(2) {
+      width: 90px;
+      height: 90px;
+      bottom: 15%;
+      right: 20%;
+      animation-delay: 2s;
+    }
+
+    .bubble:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      top: 25%;
+      right: 12%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      max-width: 420px;
+      text-align: center;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    }
+
+    .emoji {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
     }
 
     h1 {
       font-size: 2.2rem;
-      margin-bottom: 0.75rem;
+      margin: 0 0 0.75rem;
+      font-weight: 600;
     }
 
     p {
       font-size: 1.05rem;
       line-height: 1.6;
-      opacity: 0.85;
+      color: var(--muted);
+      margin: 0;
     }
 
-    .emoji {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .pill {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--peach));
+      color: #5a2e3a;
+      font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 2.5rem 1.8rem;
+        border-radius: 24px;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
+  <!-- bubbles -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+
+  <!-- card -->
+  <div class="card">
     <div class="emoji">🧴✨</div>
-    <h1>We’ll be back soon</h1>
+    <h1>Brb… </h1>
     <p>
-      Skindex is currently offline for maintenance and improvements.
+      Skindex is taking a little spa break.  
+      We’re refreshing things behind the scenes and will be back very soon.
       <br /><br />
-      We’re working behind the scenes to make things better.
-      Thanks for your patience 💗
+      Thanks for being patient 🤍
     </p>
+    <div class="pill">Back soon ✨</div>
   </div>
 </body>
 </html>
